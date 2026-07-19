@@ -19,11 +19,23 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-this-in-produc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,.onrender.com').split(',')
-CSRF_TRUSTED_ORIGINS = os.environ.get(
-    'CSRF_TRUSTED_ORIGINS',
-    'https://*.onrender.com,http://localhost:8000,http://127.0.0.1:8000'
-).split(',')
+render_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+default_hosts = ['localhost', '127.0.0.1', '0.0.0.0', '.onrender.com']
+if render_host:
+    default_hosts.append(render_host)
+
+ALLOWED_HOSTS = [host.strip() for host in os.environ.get('ALLOWED_HOSTS', ','.join(default_hosts)).split(',') if host.strip()]
+
+csrf_origins = [
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'https://*.onrender.com',
+]
+if render_host:
+    csrf_origins.append(f'https://{render_host}')
+    csrf_origins.append(f'https://www.{render_host}')
+
+CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in os.environ.get('CSRF_TRUSTED_ORIGINS', ','.join(csrf_origins)).split(',') if origin.strip()]
 
 
 # Application definition
