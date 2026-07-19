@@ -5,12 +5,20 @@ from django.shortcuts import render
 def home_view(request):
     from shop.models import Product
 
-    products = Product.objects.filter(is_active=True)
     context = {
         'plan_price': getattr(settings, 'SUBSCRIPTION_PRICE_DISPLAY', '200'),
-        'label_products': products.filter(category=Product.CATEGORY_LABELS),
-        'stamp_products': products.filter(category=Product.CATEGORY_STAMPS),
+        'label_products': [],
+        'stamp_products': [],
     }
+
+    try:
+        products = Product.objects.filter(is_active=True)
+        context['label_products'] = products.filter(category=Product.CATEGORY_LABELS)
+        context['stamp_products'] = products.filter(category=Product.CATEGORY_STAMPS)
+    except Exception:
+        context['label_products'] = []
+        context['stamp_products'] = []
+
     if request.user.is_authenticated:
         try:
             from payments.models import Subscription

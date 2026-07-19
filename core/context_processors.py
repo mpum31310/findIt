@@ -15,7 +15,8 @@ def shop(request):
         context['cart_count'] = sum(i['quantity'] for i in cart_items)
         context['cart_total'] = cart_total
     except Exception:
-        pass
+        context['cart_count'] = 0
+        context['cart_total'] = Decimal('0.00')
 
     if request.user.is_authenticated:
         try:
