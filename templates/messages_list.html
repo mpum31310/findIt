@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Messages — Scanofinder{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div class="page-head__row">
+        <div>
+            <h1>Messages</h1>
+            <p class="page-head__desc">From people who scanned your QR codes</p>
+        </div>
+    </div>
+</div>
+
+{% if message_list %}
+    {% for message in message_list %}
+    <div class="msg-item {% if not message.is_read %}unread{% endif %}">
+        <div class="d-flex flex-wrap justify-content-between gap-2">
+            <div>
+                <strong>{{ message.sender_name }}</strong>
+                <span class="text-muted"> · {{ message.item.name }}</span>
+                <p class="mb-1 mt-2">{{ message.message }}</p>
+                <small class="text-muted">
+                    {{ message.created_at|date:"M d, Y H:i" }}
+                    {% if message.sender_email %} · {{ message.sender_email }}{% endif %}
+                    {% if message.sender_phone %} · {{ message.sender_phone }}{% endif %}
+                </small>
+            </div>
+            <div class="text-end">
+                {% if not message.is_read %}
+                    <span class="badge bg-primary rounded-pill mb-2">New</span>
+                    <form method="post" action="{% url 'message_detail' message.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" name="mark_read" class="btn-outline-brand btn-sm-round">Mark read</button>
+                    </form>
+                {% else %}
+                    <span class="badge bg-secondary rounded-pill">Read</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+<div class="panel empty-state">
+    <i class="fas fa-envelope d-block"></i>
+    <h3>No messages yet</h3>
+    <p>When someone finds an item, their note will appear here.</p>
+</div>
+{% endif %}
+{% endblock %}

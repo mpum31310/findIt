@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Order #{{ order.pk }}{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <h1>Order #{{ order.pk }}</h1>
+    <p class="page-head__desc">
+        Status:
+        <span class="status-badge">{{ order.get_status_display }}</span>
+        · {{ order.created_at|date:"M d, Y H:i" }}
+    </p>
+</div>
+
+<div class="panel mb-3">
+    <h2 class="panel-title">Items</h2>
+    <ul class="list-unstyled mb-0">
+        {% for line in order.items.all %}
+        <li class="d-flex justify-content-between py-2 border-bottom">
+            <span>{{ line.product.name }} × {{ line.quantity }}</span>
+            <span>R{{ line.line_total }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    <p class="mt-3 mb-0 fw-bold">Total: R{{ order.total }}</p>
+</div>
+
+<div class="panel">
+    <h2 class="panel-title">Delivery</h2>
+    <p class="mb-1"><strong>{{ order.shipping_name }}</strong></p>
+    <p class="mb-1">{{ order.shipping_phone }}</p>
+    <p class="mb-0 text-muted">{{ order.shipping_address|linebreaksbr }}</p>
+</div>
+
+<a href="{% url 'shop' %}" class="btn-outline-brand mt-3">Back to shop</a>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Scanofinder — QR labels for your family{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<nav class="quick-links" aria-label="Quick navigation">
+    <a href="{% url 'children_list' %}" class="quick-link"><i class="fas fa-child"></i> Children</a>
+    <a href="{% url 'items_list' %}" class="quick-link"><i class="fas fa-tag"></i> Items</a>
+    <a href="{% url 'item_add' %}" class="quick-link"><i class="fas fa-plus"></i> Add item</a>
+    <a href="{% url 'messages_list' %}" class="quick-link"><i class="fas fa-envelope"></i> Messages</a>
+    <a href="{% url 'shop' %}" class="quick-link quick-link--shop"><i class="fas fa-store"></i> Shop</a>
+</nav>
+{% endif %}
+
+<a href="{% url 'shop' %}" class="shop-banner">
+    <div class="shop-banner__text">
+        <strong>Order QR labels &amp; clothing stamps</strong>
+        <span>Physical products to display your Scanofinder codes on school gear</span>
+    </div>
+    <span class="shop-banner__cta">Shop now <i class="fas fa-arrow-right"></i></span>
+</a>
+
+<section class="hero hero--modern">
+    <div>
+        <span class="hero__badge"><i class="fas fa-shield-alt"></i> Smart family safety</span>
+        <h1>Track, protect, and reunite school gear in seconds</h1>
+        <p class="lead">Create QR codes for every item, order durable labels or clothing stamps, and receive instant updates when a finder scans them.</p>
+        <div class="hero-actions">
+            {% if user.is_authenticated %}
+                <a href="{% url 'item_add' %}" class="btn-brand">Add item</a>
+                <a href="{% url 'shop' %}" class="btn-outline-brand">Shop labels &amp; stamps</a>
+            {% else %}
+                <a href="{% url 'register' %}" class="btn-brand">Create free account</a>
+                <a href="{% url 'login' %}" class="btn-outline-brand">Sign in</a>
+                <a href="#shop" class="btn-outline-brand">Browse shop</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="hero__side">
+        <h3 class="hero__card-title">What families love</h3>
+        <p class="hero__card-text">A simple workflow with modern tools built for busy school days.</p>
+        <div class="hero__stats">
+            <div class="hero__stat"><span>QR setup</span><strong>Fast</strong></div>
+            <div class="hero__stat"><span>Label delivery</span><strong>Reliable</strong></div>
+            <div class="hero__stat"><span>Finder updates</span><strong>Instant</strong></div>
+        </div>
+    </div>
+</section>
+
+{% include 'includes/shop_storefront.html' %}
+
+<div class="features">
+    <article class="feature">
+        <div class="feature__icon"><i class="fas fa-qrcode"></i></div>
+        <h3>QR codes in the app</h3>
+        <p>Generate a unique code for each item.</p>
+    </article>
+    <article class="feature">
+        <div class="feature__icon"><i class="fas fa-tags"></i></div>
+        <h3>Labels &amp; stamps</h3>
+        <p>Order physical products from our shop.</p>
+    </article>
+    <article class="feature">
+        <div class="feature__icon"><i class="fas fa-comment-dots"></i></div>
+        <h3>Finder inbox</h3>
+        <p>Get a message when someone scans a code.</p>
+    </article>
+</div>
+
+<section class="panel">
+    <h2 class="panel-title">How it works</h2>
+    <div class="steps-list">
+        <div class="steps-list__item">
+            <span class="steps-list__num">1</span>
+            <span>Add children and create items in the app</span>
+        </div>
+        <div class="steps-list__item">
+            <span class="steps-list__num">2</span>
+            <span>Order QR labels or stamps from the shop</span>
+        </div>
+        <div class="steps-list__item">
+            <span class="steps-list__num">3</span>
+            <span>Apply them to bags, bottles, and uniforms</span>
+        </div>
+        <div class="steps-list__item">
+            <span class="steps-list__num">4</span>
+            <span>Receive messages when items are found</span>
+        </div>
+    </div>
+</section>
+{% endblock %}

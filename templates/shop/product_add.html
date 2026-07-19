@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Add shop product — Scanofinder{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div class="page-head__row">
+        <div>
+            <h1>Add shop product</h1>
+            <p class="page-head__desc">New QR label or stamp listing</p>
+        </div>
+        <a href="{% url 'shop' %}" class="btn-outline-brand btn-sm-round">Back to shop</a>
+    </div>
+</div>
+
+<div class="panel" style="max-width: 560px;">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="mb-3">
+            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<small class="text-muted d-block">{{ field.help_text }}</small>{% endif %}
+            {% if field.errors %}<div class="text-danger small">{{ field.errors }}</div>{% endif %}
+        </div>
+        {% endfor %}
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn-brand">Add product</button>
+            <a href="{% url 'shop' %}" class="btn-outline-brand">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

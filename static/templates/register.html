@@ -1,0 +1,72 @@
+<div ng-controller="NavController">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#/">
+                <i class="fas fa-qrcode"></i> Scanofinder
+            </a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#/">Home</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="container-main">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0"><i class="fas fa-user-plus"></i> Create Account</h3>
+                </div>
+                <div class="card-body p-4">
+                    <div ng-if="error" class="alert alert-danger">{{ error }}</div>
+                    <div ng-if="success" class="alert alert-success">{{ success }}</div>
+                    
+                    <form ng-submit="submit()">
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-control" ng-model="user.username" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" ng-model="user.email" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Cell Number</label>
+                            <input type="tel" class="form-control" ng-model="user.cell_number" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" ng-model="user.password" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" ng-model="user.password2" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100" ng-disabled="loading">
+                            <span ng-if="loading" class="spinner-border spinner-border-sm me-2"></span>
+                            Register
+                        </button>
+                    </form>
+                    
+                    <div class="text-center mt-3">
+                        <p>Already have an account? <a href="#/login">Login here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

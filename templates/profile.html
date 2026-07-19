@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile — Scanofinder{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <h1>Profile</h1>
+    <p class="page-head__desc">Your account details</p>
+</div>
+
+<div class="panel" style="max-width: 520px;">
+    <form method="post">
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Username</label>
+                {{ form.username }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Email</label>
+                {{ form.email }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Cell</label>
+                {{ form.cell_number }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">First name</label>
+                {{ form.first_name }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Last name</label>
+                {{ form.last_name }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Member since</label>
+                <input type="text" class="form-control" value="{{ user.date_joined|date:'F d, Y' }}" readonly>
+            </div>
+        </div>
+        <div class="mt-4">
+            <button type="submit" class="btn-brand">Save changes</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

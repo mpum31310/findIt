@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Scanofinder{% endblock %}</title>
+    {% load static %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=5">
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header class="app-header">
+        {% if user.is_authenticated %}
+        <button class="app-header__toggle d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-label="Open menu">
+            <i class="fas fa-bars"></i>
+        </button>
+        {% endif %}
+
+        <a class="app-header__brand" href="{% url 'home' %}">
+            <span class="app-header__brand-icon"><i class="fas fa-qrcode"></i></span>
+            Scanofinder
+        </a>
+
+        <div class="app-header__spacer"></div>
+
+        {% if user.is_authenticated and cart_count %}
+        <a href="{% url 'cart' %}" class="header-cart d-none d-md-inline-flex" title="View cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span>{{ cart_count }}</span>
+        </a>
+        {% endif %}
+
+        {% if not user.is_authenticated %}
+        <ul class="app-header__guest-nav d-none d-sm-flex">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'shop' %}">Shop</a></li>
+            <li><a href="{% url 'login' %}">Sign in</a></li>
+            <li><a href="{% url 'register' %}" class="btn-signup">Get started</a></li>
+        </ul>
+        {% endif %}
+    </header>
+
+    {% if user.is_authenticated %}
+    <div class="app-layout flex-grow-1">
+        <aside class="app-sidebar d-none d-lg-flex">
+            <p class="app-sidebar__label">Menu</p>
+            <ul class="app-nav">
+                <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}is-active{% endif %}"><i class="fas fa-house"></i> Home</a></li>
+                <li><a href="{% url 'children_list' %}" class="{% if 'children' in request.path %}is-active{% endif %}"><i class="fas fa-child"></i> Children</a></li>
+                <li><a href="{% url 'items_list' %}" class="{% if 'items' in request.path %}is-active{% endif %}"><i class="fas fa-tag"></i> Items</a></li>
+                <li><a href="{% url 'messages_list' %}" class="{% if 'messages' in request.path %}is-active{% endif %}"><i class="fas fa-envelope"></i> Messages</a></li>
+            </ul>
+            <p class="app-sidebar__label">Account</p>
+            <ul class="app-nav">
+                <li><a href="{% url 'shop' %}" class="{% if 'shop' in request.path or request.resolver_match.url_name == 'cart' or request.resolver_match.url_name == 'shop_checkout' %}is-active{% endif %}"><i class="fas fa-store"></i> Shop</a></li>
+                <li><a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}is-active{% endif %}"><i class="fas fa-user"></i> Profile</a></li>
+            </ul>
+            <div class="app-sidebar__footer">
+                <ul class="app-nav">
+                    <li><a href="{% url 'logout' %}"><i class="fas fa-arrow-right-from-bracket"></i> Sign out</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <div class="offcanvas offcanvas-start sidebar-offcanvas d-lg-none" tabindex="-1" id="sidebarMenu">
+            <div class="offcanvas-header border-bottom">
+                <h5 class="offcanvas-title fw-semibold">Menu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="app-nav">
+                    <li><a href="{% url 'home' %}" data-bs-dismiss="offcanvas"><i class="fas fa-house"></i> Home</a></li>
+                    <li><a href="{% url 'children_list' %}" data-bs-dismiss="offcanvas"><i class="fas fa-child"></i> Children</a></li>
+                    <li><a href="{% url 'items_list' %}" data-bs-dismiss="offcanvas"><i class="fas fa-tag"></i> Items</a></li>
+                    <li><a href="{% url 'messages_list' %}" data-bs-dismiss="offcanvas"><i class="fas fa-envelope"></i> Messages</a></li>
+                    <li><a href="{% url 'shop' %}" data-bs-dismiss="offcanvas"><i class="fas fa-store"></i> Shop</a></li>
+                    <li><a href="{% url 'profile' %}" data-bs-dismiss="offcanvas"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="{% url 'logout' %}"><i class="fas fa-arrow-right-from-bracket"></i> Sign out</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="app-content flex-grow-1">
+    {% else %}
+        <div class="site-content flex-grow-1">
+    {% endif %}
+
+            {% include 'includes/flash_messages.html' %}
+            {% block content %}{% endblock %}
+
+    {% if user.is_authenticated %}
+        </div>
+    </div>
+    {% else %}
+        </div>
+    {% endif %}
+
+    <footer class="site-footer mt-auto">
+        <p class="mb-1">&copy; {% now "Y" %} Scanofinder</p>
+        <p class="mb-0">
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'shop' %}">Shop</a>
+            <a href="{% url 'terms' %}">Terms</a>
+            <a href="{% url 'privacy' %}">Privacy</a>
+        </p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

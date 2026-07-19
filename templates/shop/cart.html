@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Cart — Scanofinder Shop{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <h1>Your cart</h1>
+</div>
+
+{% if cart_items %}
+<form method="post">
+    {% csrf_token %}
+    <div class="panel mb-3">
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr>
+                    <td>
+                        <strong>{{ item.product.name }}</strong>
+                        <br><small class="text-muted">{{ item.product.pack_size }}</small>
+                    </td>
+                    <td>R{{ item.product.price }}</td>
+                    <td>
+                        <input type="number" name="qty_{{ item.product.id }}" value="{{ item.quantity }}"
+                               min="0" max="99" class="form-control cart-qty-input">
+                    </td>
+                    <td>R{{ item.line_total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="cart-table__footer">
+            <button type="submit" name="update_cart" class="btn-outline-brand btn-sm-round">Update cart</button>
+            <strong class="cart-table__total">Total: R{{ cart_total }}</strong>
+        </div>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+        <button type="submit" name="checkout" class="btn-brand">Proceed to checkout</button>
+        <a href="{% url 'shop' %}" class="btn-outline-brand">Continue shopping</a>
+    </div>
+</form>
+{% else %}
+<div class="panel empty-state">
+    <h3>Your cart is empty</h3>
+    <a href="{% url 'shop' %}" class="btn-brand mt-2">Browse labels &amp; stamps</a>
+</div>
+{% endif %}
+{% endblock %}

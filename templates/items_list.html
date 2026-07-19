@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Items — Scanofinder{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div class="page-head__row">
+        <div>
+            <h1>Items</h1>
+            <p class="page-head__desc">QR-labelled belongings</p>
+        </div>
+        <a href="{% url 'item_add' %}" class="btn-brand btn-sm-round">+ Add item</a>
+    </div>
+</div>
+
+{% if items %}
+<div class="tile-grid">
+    {% for item in items %}
+    <article class="tile">
+        {% if item.item_image %}
+            <img src="{{ item.item_image.url }}" class="tile-img" alt="{{ item.name }}">
+        {% endif %}
+        <h3>{{ item.name }}</h3>
+        {% if item.child %}
+            <p class="meta">{{ item.child.name }} {{ item.child.surname }}</p>
+        {% endif %}
+        {% if item.description %}<p class="meta">{{ item.description|truncatewords:12 }}</p>{% endif %}
+        <a href="{% url 'item_detail' item.pk %}" class="btn-outline-brand btn-sm-round">Open</a>
+    </article>
+    {% endfor %}
+</div>
+{% else %}
+<div class="panel empty-state">
+    <i class="fas fa-tag d-block"></i>
+    <h3>No items yet</h3>
+    <p>Create an item to generate a QR label.</p>
+    <a href="{% url 'item_add' %}" class="btn-brand">Add item</a>
+</div>
+{% endif %}
+{% endblock %}

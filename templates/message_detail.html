@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <h2><i class="fas fa-comment"></i> Message Details</h2>
+</div>
+
+<div class="card">
+    <div class="card-body p-4">
+        <div class="mb-3">
+            <strong>From:</strong> {{ message.sender_name }}
+        </div>
+        {% if message.sender_email %}
+            <div class="mb-3">
+                <strong>Email:</strong> {{ message.sender_email }}
+            </div>
+        {% endif %}
+        {% if message.sender_phone %}
+            <div class="mb-3">
+                <strong>Phone:</strong> {{ message.sender_phone }}
+            </div>
+        {% endif %}
+        <div class="mb-3">
+            <strong>About Item:</strong> {{ message.item.name }}
+        </div>
+        <div class="mb-3">
+            <strong>Message:</strong>
+            <p class="mt-2">{{ message.message }}</p>
+        </div>
+        <div class="mb-3">
+            <strong>Received:</strong> {{ message.created_at|date:"F d, Y H:i" }}
+        </div>
+        <div class="mb-3">
+            <strong>Status:</strong> 
+            <span class="badge {% if message.is_read %}bg-secondary{% else %}bg-primary{% endif %}">
+                {% if message.is_read %}Read{% else %}New{% endif %}
+            </span>
+        </div>
+        
+        <form method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" name="mark_read" class="btn btn-primary">
+                {% if message.is_read %}Mark as Unread{% else %}Mark as Read{% endif %}
+            </button>
+        </form>
+        <a href="{% url 'messages_list' %}" class="btn btn-secondary ms-2">Back to Messages</a>
+    </div>
+</div>
+{% endblock %}
+

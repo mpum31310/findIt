@@ -1,0 +1,57 @@
+<div ng-controller="NavController">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#/">
+                <i class="fas fa-qrcode"></i> Scanofinder
+            </a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#/children">Back to Children</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="container-main">
+    <div class="page-header">
+        <h2><i class="fas fa-user-plus"></i> Add Child</h2>
+    </div>
+    
+    <div class="card">
+        <div class="card-body p-4">
+            <div ng-if="error" class="alert alert-danger">{{ error }}</div>
+            <div ng-if="success" class="alert alert-success">{{ success }}</div>
+            
+            <form ng-submit="submit()">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="text" class="form-control" ng-model="child.name" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Surname</label>
+                        <input type="text" class="form-control" ng-model="child.surname" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Grade</label>
+                        <input type="text" class="form-control" ng-model="child.grade" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">School</label>
+                        <input type="text" class="form-control" ng-model="child.school" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" ng-disabled="loading">
+                    <span ng-if="loading" class="spinner-border spinner-border-sm me-2"></span>
+                    Add Child
+                </button>
+                <a href="#/children" class="btn btn-secondary ms-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+

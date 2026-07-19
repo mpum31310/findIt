@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Children — Scanofinder{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div class="page-head__row">
+        <div>
+            <h1>Children</h1>
+            <p class="page-head__desc">Profiles you can assign items to</p>
+        </div>
+        <a href="{% url 'child_add' %}" class="btn-brand btn-sm-round">+ Add child</a>
+    </div>
+</div>
+
+{% if children %}
+<div class="tile-grid">
+    {% for child in children %}
+    <article class="tile">
+        <h3>{{ child.name }} {{ child.surname }}</h3>
+        <p class="meta">{{ child.grade }} · {{ child.school }}</p>
+        <a href="{% url 'child_detail' child.pk %}" class="btn-outline-brand btn-sm-round">View</a>
+    </article>
+    {% endfor %}
+</div>
+{% else %}
+<div class="panel empty-state">
+    <i class="fas fa-child d-block"></i>
+    <h3>No children yet</h3>
+    <p>Add a child before assigning items.</p>
+    <a href="{% url 'child_add' %}" class="btn-brand">Add child</a>
+</div>
+{% endif %}
+{% endblock %}

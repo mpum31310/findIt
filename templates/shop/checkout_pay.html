@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Pay order #{{ order.pk }}{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <h1>Pay for order #{{ order.pk }}</h1>
+    <p class="page-head__desc">Total: R{{ order.total }}</p>
+</div>
+
+<div class="panel" style="max-width: 440px;">
+    {% if payfast_form_fields %}
+        <form method="post" action="{{ payfast_url }}">
+            {% csrf_token %}
+            {% for key, value in payfast_form_fields.items %}
+                <input type="hidden" name="{{ key }}" value="{{ value }}">
+            {% endfor %}
+            <button type="submit" class="btn-brand w-100">Pay via Payfast</button>
+        </form>
+    {% else %}
+        <p class="text-muted">Payment is not available right now.</p>
+    {% endif %}
+</div>
+{% endblock %}

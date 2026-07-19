@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Register — Scanofinder{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+    <div class="auth-card">
+        <div class="auth-card__header">
+            <div class="auth-card__icon"><i class="fas fa-user-plus"></i></div>
+            <span class="auth-card__eyebrow">Join today</span>
+            <h1>Create account</h1>
+            <p class="auth-card__text">Set up your family profile and start protecting belongings right away.</p>
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="mb-3">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}<div class="text-danger small">{{ field.errors }}</div>{% endif %}
+            </div>
+            {% endfor %}
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+            {% endif %}
+            <button type="submit" class="btn-brand">Register</button>
+        </form>
+        <p class="text-center text-muted small mt-3 mb-0">
+            Already registered? <a href="{% url 'login' %}">Sign in</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

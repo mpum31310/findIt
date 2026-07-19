@@ -1,0 +1,108 @@
+<div ng-controller="NavController">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#/">
+                <i class="fas fa-qrcode"></i> Scanofinder
+            </a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#/profile">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#/children">Children</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#/items">Items</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#/messages">Messages</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#/" ng-click="logout()">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="container-main">
+    <div class="page-header">
+        <h2><i class="fas fa-user"></i> My Profile</h2>
+    </div>
+    
+    <div class="card" ng-if="loading">
+        <div class="card-body text-center p-5">
+            <div class="spinner-border text-primary" role="status"></div>
+        </div>
+    </div>
+    
+    <div class="card" ng-if="!loading && !editing">
+        <div class="card-body p-4">
+            <div ng-if="success" class="alert alert-success">{{ success }}</div>
+            <div ng-if="error" class="alert alert-danger">{{ error }}</div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <strong>Username:</strong> {{ user.username }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <strong>Email:</strong> {{ user.email }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <strong>Cell Number:</strong> {{ user.cell_number }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <strong>First Name:</strong> {{ user.first_name || 'Not set' }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <strong>Last Name:</strong> {{ user.last_name || 'Not set' }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <strong>Member Since:</strong> {{ user.date_joined | date:'medium' }}
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" ng-click="edit()">
+                <i class="fas fa-edit"></i> Edit Profile
+            </button>
+        </div>
+    </div>
+    
+    <div class="card" ng-if="!loading && editing">
+        <div class="card-body p-4">
+            <form ng-submit="save()">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-control" ng-model="editUser.username" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" ng-model="editUser.email" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Cell Number</label>
+                        <input type="tel" class="form-control" ng-model="editUser.cell_number" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-control" ng-model="editUser.first_name">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" class="form-control" ng-model="editUser.last_name">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary me-2" ng-disabled="loading">
+                    <span ng-if="loading" class="spinner-border spinner-border-sm me-2"></span>
+                    Save Changes
+                </button>
+                <button type="button" class="btn btn-secondary" ng-click="cancel()">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,74 @@
+<div ng-controller="NavController">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#/">
+                <i class="fas fa-qrcode"></i> Scanofinder
+            </a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#/">Home</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="container-main">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="mb-0">Privacy Policy</h2>
+        </div>
+        <div class="card-body p-4">
+            <p><strong>Last Updated:</strong> {{ '2024-01-01' | date:'medium' }}</p>
+            
+            <h4>1. Information We Collect</h4>
+            <p>We collect information you provide directly to us, including:</p>
+            <ul>
+                <li>Username, email address, and cell number</li>
+                <li>Children's information (name, surname, grade, school)</li>
+                <li>Item information and images</li>
+                <li>Payment information (processed securely through Stripe)</li>
+            </ul>
+            
+            <h4 class="mt-4">2. How We Use Your Information</h4>
+            <p>We use the information we collect to:</p>
+            <ul>
+                <li>Provide and maintain our service</li>
+                <li>Process payments and manage subscriptions</li>
+                <li>Send you messages from item finders</li>
+                <li>Improve our service</li>
+            </ul>
+            
+            <h4 class="mt-4">3. Data Protection</h4>
+            <p>We implement appropriate security measures to protect your personal information. However, no method of transmission over the internet is 100% secure.</p>
+            
+            <h4 class="mt-4">4. Data Sharing</h4>
+            <p>We do not sell your personal information. We may share information with:</p>
+            <ul>
+                <li>Payment processors (Stripe) for transaction processing</li>
+                <li>Service providers who assist in operating our service</li>
+            </ul>
+            
+            <h4 class="mt-4">5. Your Rights (POPI Act Compliance)</h4>
+            <p>Under the Protection of Personal Information Act (POPI Act) of South Africa, you have the right to:</p>
+            <ul>
+                <li>Access your personal information</li>
+                <li>Correct inaccurate information</li>
+                <li>Request deletion of your information</li>
+                <li>Object to processing of your information</li>
+            </ul>
+            
+            <h4 class="mt-4">6. Children's Privacy</h4>
+            <p>We collect information about children only as provided by their parents/guardians. This information is used solely for the purpose of managing items assigned to children.</p>
+            
+            <h4 class="mt-4">7. Cookies</h4>
+            <p>We use cookies to maintain your session and improve your experience. You can disable cookies in your browser settings.</p>
+            
+            <h4 class="mt-4">8. Contact Us</h4>
+            <p>For privacy-related inquiries, please contact us through your account dashboard.</p>
+        </div>
+    </div>
+</div>
+

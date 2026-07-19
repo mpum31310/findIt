@@ -1,0 +1,65 @@
+<section class="ecommerce" id="pricing" aria-labelledby="pricing-heading">
+    <div class="ecommerce__header">
+        <div>
+            <p class="ecommerce__eyebrow">Shop</p>
+            <h2 id="pricing-heading" class="ecommerce__title">Choose your plan</h2>
+            <p class="ecommerce__subtitle">
+                Start free, then unlock unlimited labels and messaging for <strong>R{{ plan_price }}/year</strong>.
+            </p>
+        </div>
+        {% if user.is_authenticated and subscription and subscription.is_active %}
+            <div class="ecommerce__status">
+                <span class="status-badge"><i class="fas fa-check-circle"></i> Subscribed</span>
+            </div>
+        {% elif user.is_authenticated %}
+            <a href="{% url 'shop' %}" class="btn-brand">Go to checkout</a>
+        {% endif %}
+    </div>
+
+    <div class="pricing-grid">
+        <article class="price-card">
+            <h3>Starter</h3>
+            <p class="amount">R0 <span>/ forever</span></p>
+            <p class="price-card__tagline">Try Scanofinder at no cost</p>
+            <ul>
+                <li><i class="fas fa-check"></i> Parent account</li>
+                <li><i class="fas fa-check"></i> Add children &amp; items</li>
+                <li><i class="fas fa-check"></i> Generate QR labels</li>
+            </ul>
+            {% if user.is_authenticated %}
+                <a href="{% url 'items_list' %}" class="btn-outline-brand">Open dashboard</a>
+            {% else %}
+                <a href="{% url 'register' %}" class="btn-outline-brand">Create free account</a>
+            {% endif %}
+        </article>
+
+        <article class="price-card featured">
+            <span class="badge-popular">Best value</span>
+            <h3>Annual family plan</h3>
+            <p class="amount">R{{ plan_price }} <span>/ year</span></p>
+            <p class="price-card__tagline">Everything you need for the school year</p>
+            <ul>
+                <li><i class="fas fa-check"></i> Unlimited children &amp; items</li>
+                <li><i class="fas fa-check"></i> QR codes with item names</li>
+                <li><i class="fas fa-check"></i> Finder message inbox</li>
+                <li><i class="fas fa-check"></i> Priority support</li>
+            </ul>
+            {% if user.is_authenticated %}
+                {% if subscription and subscription.is_active %}
+                    <span class="status-badge w-100 justify-content-center">Active until {{ subscription.end_date|date:"M d, Y" }}</span>
+                    <a href="{% url 'shop' %}" class="btn-outline-brand mt-2">Manage plan</a>
+                {% else %}
+                    <a href="{% url 'shop' %}" class="btn-brand">Subscribe — R{{ plan_price }}/yr</a>
+                {% endif %}
+            {% else %}
+                <a href="{% url 'register' %}" class="btn-brand">Sign up &amp; subscribe</a>
+            {% endif %}
+        </article>
+    </div>
+
+    <div class="ecommerce__trust">
+        <span><i class="fas fa-lock"></i> Secure Stripe checkout</span>
+        <span><i class="fas fa-rotate-left"></i> Cancel anytime</span>
+        <span><i class="fas fa-receipt"></i> One simple annual payment</span>
+    </div>
+</section>

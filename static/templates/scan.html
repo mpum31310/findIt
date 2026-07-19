@@ -1,0 +1,58 @@
+<div class="container-main">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="mb-0"><i class="fas fa-qrcode"></i> Item Found</h3>
+        </div>
+        <div class="card-body p-4">
+            <div ng-if="loading" class="text-center p-5">
+                <div class="spinner-border text-primary" role="status"></div>
+            </div>
+            
+            <div ng-if="error" class="alert alert-danger">
+                {{ error }}
+            </div>
+            
+            <div ng-if="item && !messageSent">
+                <div class="text-center mb-4">
+                    <h4>{{ item.name }}</h4>
+                    <p ng-if="item.description">{{ item.description }}</p>
+                </div>
+                
+                <form ng-submit="sendMessage()">
+                    <div class="mb-3">
+                        <label class="form-label">Your Name</label>
+                        <input type="text" class="form-control" ng-model="message.sender_name" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Your Email (Optional)</label>
+                        <input type="email" class="form-control" ng-model="message.sender_email">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Your Phone (Optional)</label>
+                        <input type="tel" class="form-control" ng-model="message.sender_phone">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Message</label>
+                        <textarea class="form-control" rows="4" ng-model="message.message" required
+                                  placeholder="Let the owner know where you found this item..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100" ng-disabled="loading">
+                        <span ng-if="loading" class="spinner-border spinner-border-sm me-2"></span>
+                        Send Message to Owner
+                    </button>
+                </form>
+            </div>
+            
+            <div ng-if="messageSent" class="alert alert-success text-center">
+                <i class="fas fa-check-circle fa-2x mb-3"></i>
+                <h4>Message Sent!</h4>
+                <p>Thank you for contacting the owner. They will be notified.</p>
+            </div>
+        </div>
+    </div>
+</div>
+

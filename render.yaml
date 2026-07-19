@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: scanofinder
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
+    startCommand: "gunicorn scanofinder.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.0
+      - key: DJANGO_SETTINGS_MODULE
+        value: scanofinder.settings
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "localhost,127.0.0.1,.onrender.com"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: scanofinder-db
+          property: connectionString
+
+databases:
+  - name: scanofinder-db
+    plan: free
+    databaseName: scanofinder
+    user: scanofinder

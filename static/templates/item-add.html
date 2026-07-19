@@ -1,0 +1,65 @@
+<div ng-controller="NavController">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#/">
+                <i class="fas fa-qrcode"></i> Scanofinder
+            </a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#/items">Back to Items</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="container-main">
+    <div class="page-header">
+        <h2><i class="fas fa-plus-circle"></i> Add Item</h2>
+    </div>
+    
+    <div class="card">
+        <div class="card-body p-4">
+            <div ng-if="error" class="alert alert-danger">{{ error }}</div>
+            <div ng-if="success" class="alert alert-success">{{ success }}</div>
+            
+            <form ng-submit="submit()">
+                <div class="mb-3">
+                    <label class="form-label">Item Name</label>
+                    <input type="text" class="form-control" ng-model="item.name" required>
+                    <small class="text-muted">This name will appear below the QR code</small>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" rows="3" ng-model="item.description"></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Assign to Child (Optional)</label>
+                    <select class="form-select" ng-model="item.child_id">
+                        <option value="">None</option>
+                        <option ng-repeat="child in children" value="{{ child.id }}">
+                            {{ child.name }} {{ child.surname }}
+                        </option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Item Image (Optional)</label>
+                    <input type="file" class="form-control" accept="image/*" 
+                           onchange="angular.element(this).scope().onFileSelect(this.files)">
+                </div>
+                
+                <button type="submit" class="btn btn-primary" ng-disabled="loading">
+                    <span ng-if="loading" class="spinner-border spinner-border-sm me-2"></span>
+                    Create Item & Generate QR Code
+                </button>
+                <a href="#/items" class="btn btn-secondary ms-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+

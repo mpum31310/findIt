@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }} — Shop{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div class="page-head__row">
+        <div>
+            <p class="mb-1"><a href="{% url 'shop' %}" class="text-muted small">← Back to shop</a></p>
+            <h1>{{ product.name }}</h1>
+            <p class="page-head__desc">{{ product.get_category_display }} · {{ product.pack_size }}</p>
+        </div>
+        {% if cart_count %}
+        <a href="{% url 'cart' %}" class="btn-outline-brand btn-sm-round">Cart ({{ cart_count }})</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="product-detail">
+    <div class="product-detail__media panel">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-detail__image">
+        {% else %}
+            <div class="product-detail__placeholder">
+                {% if product.category == 'stamps' %}
+                    <i class="fas fa-stamp"></i>
+                {% else %}
+                    <i class="fas fa-tags"></i>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="product-detail__info panel">
+        <p class="product-detail__price">R{{ product.price }}</p>
+        <p class="product-detail__pack">{{ product.pack_size }}</p>
+        <div class="product-detail__description">{{ product.description|linebreaks }}</div>
+
+        <form method="post" class="product-detail__buy mt-4">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label" for="quantity">Quantity</label>
+                <input type="number" name="quantity" id="quantity" value="1" min="1" max="99" class="form-control cart-qty-input">
+            </div>
+            {% if user.is_authenticated %}
+                <button type="submit" name="add_to_cart" class="btn-brand w-100">Add to cart</button>
+            {% else %}
+                <a href="{% url 'login' %}?next={% url 'shop_product_detail' product.slug %}" class="btn-brand w-100 d-block text-center">
+                    Sign in to purchase
+                </a>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+{% if related_products %}
+<section class="mt-4">
+    <h2 class="product-category__title">You may also like</h2>
+    <div class="product-grid">
+        {% for product in related_products %}
+            {% include 'includes/product_card.html' with product=product %}
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}

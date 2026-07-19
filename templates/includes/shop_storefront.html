@@ -1,0 +1,46 @@
+<section class="ecommerce" id="shop" aria-labelledby="shop-heading">
+    <div class="ecommerce__header">
+        <div>
+            <p class="ecommerce__eyebrow">Shop</p>
+            <h2 id="shop-heading" class="ecommerce__title">QR labels &amp; stamps</h2>
+            <p class="ecommerce__subtitle">
+                Physical display products for your Scanofinder codes — stick, stamp, and label school gear so finders can reach you.
+            </p>
+        </div>
+        <a href="{% url 'shop' %}" class="btn-brand">Browse full shop</a>
+    </div>
+
+    {% if label_products or stamp_products %}
+    <div class="product-showcase">
+        {% if label_products %}
+        <div class="product-category">
+            <h3 class="product-category__title"><i class="fas fa-tags"></i> Labels &amp; stickers</h3>
+            <div class="product-grid product-grid--compact">
+                {% for product in label_products|slice:":3" %}
+                {% include 'includes/product_card.html' with product=product compact=True %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if stamp_products %}
+        <div class="product-category">
+            <h3 class="product-category__title"><i class="fas fa-stamp"></i> Clothing stamps</h3>
+            <div class="product-grid product-grid--compact">
+                {% for product in stamp_products|slice:":3" %}
+                {% include 'includes/product_card.html' with product=product compact=True %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% else %}
+    <p class="text-muted">Products loading soon. Visit the <a href="{% url 'shop' %}">shop</a>.</p>
+    {% endif %}
+
+    <div class="ecommerce__trust">
+        <span><i class="fas fa-truck"></i> Delivery across South Africa</span>
+        <span><i class="fas fa-droplet"></i> Waterproof label options</span>
+        <span><i class="fas fa-lock"></i> Secure checkout</span>
+    </div>
+</section>

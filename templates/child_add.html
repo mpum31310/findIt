@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Add child — Scanofinder{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <h1>Add child</h1>
+</div>
+
+<div class="panel" style="max-width: 520px;">
+    <form method="post">
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Name</label>
+                {{ form.name }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Surname</label>
+                {{ form.surname }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Grade</label>
+                {{ form.grade }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">School</label>
+                {{ form.school }}
+            </div>
+        </div>
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn-brand">Save</button>
+            <a href="{% url 'children_list' %}" class="btn-outline-brand">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+<div ng-controller="NavController">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#/">
+                <i class="fas fa-qrcode"></i> Scanofinder
+            </a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#/profile">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#/children">Children</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#/items">Items</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#/messages">Messages</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#/" ng-click="logout()">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="container-main">
+    <div class="page-header">
+        <h2><i class="fas fa-comments"></i> Messages</h2>
+    </div>
+    
+    <div class="card" ng-if="loading">
+        <div class="card-body text-center p-5">
+            <div class="spinner-border text-primary" role="status"></div>
+        </div>
+    </div>
+    
+    <div ng-if="!loading && messages.length === 0" class="card">
+        <div class="card-body text-center p-5">
+            <i class="fas fa-comments fa-3x mb-3 text-muted"></i>
+            <h4>No messages yet</h4>
+            <p class="text-muted">Messages from people who scan your QR codes will appear here</p>
+        </div>
+    </div>
+    
+    <div ng-if="!loading && messages.length > 0">
+        <div class="message-card" ng-class="{'unread': !message.is_read}" 
+             ng-repeat="message in messages" ng-click="markRead(message)">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h5>{{ message.sender_name }}</h5>
+                    <p class="mb-1"><strong>About:</strong> {{ message.item.name }}</p>
+                    <p class="mb-1">{{ message.message }}</p>
+                    <small class="text-muted">
+                        <span ng-if="message.sender_email">{{ message.sender_email }}</span>
+                        <span ng-if="message.sender_phone"> | {{ message.sender_phone }}</span>
+                    </small>
+                </div>
+                <div>
+                    <span class="badge" ng-class="message.is_read ? 'bg-secondary' : 'bg-primary'">
+                        {{ message.is_read ? 'Read' : 'New' }}
+                    </span>
+                    <p class="text-muted small mt-2">{{ message.created_at | date:'short' }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

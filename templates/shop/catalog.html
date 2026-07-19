@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Shop — QR labels &amp; stamps{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div class="page-head__row">
+        <div>
+            <h1><i class="fas fa-store"></i> Shop</h1>
+            <p class="page-head__desc">QR code labels, stickers, and clothing stamps for your family</p>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+            {% if user.is_staff %}
+            <a href="{% url 'shop_product_add' %}" class="btn-outline-brand btn-sm-round">+ Add product</a>
+            {% endif %}
+            {% if cart_count %}
+            <a href="{% url 'cart' %}" class="btn-brand btn-sm-round">
+                Cart ({{ cart_count }}) — R{{ cart_total }}
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<p class="shop-intro panel">
+    Generate QR codes in the app, then order <strong>physical labels and stamps</strong> to display them on bags, bottles, uniforms, and books.
+</p>
+
+{% if label_products %}
+<section class="product-category mb-4">
+    <h2 class="product-category__title"><i class="fas fa-tags"></i> Labels &amp; stickers</h2>
+    <p class="product-category__desc">Adhesive products — print your codes and peel onto items.</p>
+    <div class="product-grid">
+        {% for product in label_products %}
+            {% include 'includes/product_card.html' with product=product %}
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% if stamp_products %}
+<section class="product-category mb-4">
+    <h2 class="product-category__title"><i class="fas fa-stamp"></i> Clothing stamps</h2>
+    <p class="product-category__desc">Stamp QR codes directly onto fabric — great for uniforms and sports kit.</p>
+    <div class="product-grid">
+        {% for product in stamp_products %}
+            {% include 'includes/product_card.html' with product=product %}
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% if not label_products and not stamp_products %}
+<div class="panel empty-state">
+    <h3>No products yet</h3>
+    <p>Check back soon or contact support.</p>
+</div>
+{% endif %}
+
+<div class="ecommerce__trust mt-3">
+    <span><i class="fas fa-qrcode"></i> Works with your Scanofinder QR codes</span>
+    <span><i class="fas fa-truck"></i> Nationwide delivery</span>
+    {% if stripe_configured %}
+    <span><i class="fas fa-lock"></i> Card payments via Stripe</span>
+    {% endif %}
+</div>
+{% endblock %}

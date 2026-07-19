@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}About — Scanofinder{% endblock %}
+
+{% block content %}
+<div class="page-head"><h1>About Scanofinder</h1></div>
+<div class="panel">
+    <p>Scanofinder helps parents label children's belongings with QR codes so finders can contact you in one scan.</p>
+    <p class="mb-0"><a href="{% url 'home' %}#pricing">See pricing</a> · <a href="{% url 'register' %}">Create an account</a></p>
+</div>
+{% endblock %}
