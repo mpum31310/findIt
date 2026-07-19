@@ -7,7 +7,7 @@ services:
     startCommand: "gunicorn scanofinder.wsgi:application"
     envVars:
       - key: PYTHON_VERSION
-        value: 3.13.0
+        value: 3.12.9
       - key: DJANGO_SETTINGS_MODULE
         value: scanofinder.settings
       - key: SECRET_KEY
