@@ -17,7 +17,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-this-in-production')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+# DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+DEBUG = True
+
 
 render_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 default_hosts = ['localhost', '127.0.0.1', '0.0.0.0']
@@ -175,3 +177,25 @@ STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', '')
 SUBSCRIPTION_PRICE = int(os.environ.get('SUBSCRIPTION_PRICE', '20000'))
 SUBSCRIPTION_PRICE_DISPLAY = os.environ.get('SUBSCRIPTION_PRICE_DISPLAY', '200')
 
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
