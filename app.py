@@ -1,3 +1,3 @@
-from scanofinder.wsgi import application
+from scanofinder.wsgi import application as app
 
-__all__ = ["application"]
+__all__ = ["app"]
