@@ -20,11 +20,15 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-this-in-produc
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
 render_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-default_hosts = ['localhost', '127.0.0.1', '0.0.0.0', '.onrender.com']
+default_hosts = ['localhost', '127.0.0.1', '0.0.0.0']
 if render_host:
-    default_hosts.append(render_host)
+    default_hosts.extend([render_host, f'www.{render_host}'])
 
-ALLOWED_HOSTS = [host.strip() for host in os.environ.get('ALLOWED_HOSTS', ','.join(default_hosts)).split(',') if host.strip()]
+allowed_hosts_env = os.environ.get('ALLOWED_HOSTS', '')
+if allowed_hosts_env:
+    ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_env.split(',') if host.strip()]
+else:
+    ALLOWED_HOSTS = ['*'] if not DEBUG else default_hosts
 
 csrf_origins = [
     'http://localhost:8000',
@@ -32,8 +36,7 @@ csrf_origins = [
     'https://*.onrender.com',
 ]
 if render_host:
-    csrf_origins.append(f'https://{render_host}')
-    csrf_origins.append(f'https://www.{render_host}')
+    csrf_origins.extend([f'https://{render_host}', f'https://www.{render_host}'])
 
 CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in os.environ.get('CSRF_TRUSTED_ORIGINS', ','.join(csrf_origins)).split(',') if origin.strip()]
 
@@ -141,6 +144,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 
