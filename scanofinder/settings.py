@@ -99,9 +99,10 @@ WSGI_APPLICATION = 'scanofinder.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
+        # Fall back to local SQLite if DATABASE_URL isn't set (e.g., during local dev)
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
         conn_max_age=600,
-        ssl_require=False,
+        conn_health_checks=True,
     )
 }
 
