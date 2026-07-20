@@ -2,39 +2,231 @@
 
 {% block title %}Items — Scanofinder{% endblock %}
 
+{% block extra_css %}
+<style>
+    .page-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Page Header */
+    .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .page-header h1 {
+        font-size: 1.75rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.25rem;
+    }
+
+    .page-header p {
+        color: var(--text-muted);
+        font-size: 0.925rem;
+        margin: 0;
+    }
+
+    /* Horizontal Items Grid */
+    .items-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+        gap: 1rem;
+    }
+
+    .item-card-horizontal {
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        border-radius: 14px;
+        padding: 0.85rem 1.15rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .item-card-horizontal:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+        border-color: #cbd5e1;
+    }
+
+    .item-card__left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        min-width: 0; /* Prevents overflow with long names */
+    }
+
+    /* Thumbnail or Icon Box */
+    .item-card__thumb {
+        width: 52px;
+        height: 52px;
+        border-radius: 10px;
+        object-fit: cover;
+        flex-shrink: 0;
+        border: 1px solid var(--border-color);
+    }
+
+    .item-card__placeholder {
+        width: 52px;
+        height: 52px;
+        background: #e0e7ff;
+        color: var(--primary-color);
+        font-size: 1.1rem;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .item-card__title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 0.2rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .item-card__meta {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+    }
+
+    .meta-badge {
+        background: #f1f5f9;
+        color: var(--text-muted);
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.15rem 0.5rem;
+        border-radius: 4px;
+        white-space: nowrap;
+    }
+
+    .meta-desc {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Empty State */
+    .empty-state-card {
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 3.5rem 2rem;
+        text-align: center;
+    }
+
+    .empty-state-icon {
+        width: 64px;
+        height: 64px;
+        background: #f1f5f9;
+        color: var(--text-muted);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        margin-bottom: 1.25rem;
+    }
+
+    @media (max-width: 480px) {
+        .items-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .item-card-horizontal {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .item-card__action {
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .item-card__action a {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="page-head">
-    <div class="page-head__row">
+<div class="page-container">
+
+    <!-- Header Block -->
+    <header class="page-header">
         <div>
             <h1>Items</h1>
-            <p class="page-head__desc">QR-labelled belongings</p>
+            <p>QR-labelled belongings registered in your account</p>
         </div>
-        <a href="{% url 'item_add' %}" class="btn-brand btn-sm-round">+ Add item</a>
-    </div>
-</div>
+        <a href="{% url 'item_add' %}" class="btn btn-primary fw-semibold d-inline-flex align-items-center gap-2">
+            <i class="fas fa-plus"></i> Add item
+        </a>
+    </header>
 
-{% if items %}
-<div class="tile-grid">
-    {% for item in items %}
-    <article class="tile">
-        {% if item.item_image %}
-            <img src="{{ item.item_image.url }}" class="tile-img" alt="{{ item.name }}">
-        {% endif %}
-        <h3>{{ item.name }}</h3>
-        {% if item.child %}
-            <p class="meta">{{ item.child.name }} {{ item.child.surname }}</p>
-        {% endif %}
-        {% if item.description %}<p class="meta">{{ item.description|truncatewords:12 }}</p>{% endif %}
-        <a href="{% url 'item_detail' item.pk %}" class="btn-outline-brand btn-sm-round">Open</a>
-    </article>
-    {% endfor %}
+    <!-- Content Block -->
+    {% if items %}
+    <div class="items-grid">
+        {% for item in items %}
+        <article class="item-card-horizontal">
+            <div class="item-card__left">
+                {% if item.item_image %}
+                    <img src="{{ item.item_image.url }}" class="item-card__thumb" alt="{{ item.name }}">
+                {% else %}
+                    <div class="item-card__placeholder">
+                        <i class="fas fa-tag"></i>
+                    </div>
+                {% endif %}
+                <div class="overflow-hidden">
+                    <h3 class="item-card__title">{{ item.name }}</h3>
+                    <div class="item-card__meta">
+                        {% if item.child %}
+                            <span class="meta-badge"><i class="fas fa-child me-1"></i>{{ item.child.name }} {{ item.child.surname }}</span>
+                        {% endif %}
+                        {% if item.description %}
+                            <p class="meta-desc">{{ item.description|truncatewords:6 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="item-card__action flex-shrink-0">
+                <a href="{% url 'item_detail' item.pk %}" class="btn btn-outline-secondary btn-sm fw-semibold px-3">
+                    Open
+                </a>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state-card">
+        <div class="empty-state-icon">
+            <i class="fas fa-tag"></i>
+        </div>
+        <h4 class="fw-bold mb-2">No items created yet</h4>
+        <p class="text-muted small mb-4 mx-auto" style="max-width: 360px;">
+            Create your first item to generate a trackable QR code and link physical labels or stamps.
+        </p>
+        <a href="{% url 'item_add' %}" class="btn btn-primary fw-semibold">
+            <i class="fas fa-plus me-1"></i> Add your first item
+        </a>
+    </div>
+    {% endif %}
+
 </div>
-{% else %}
-<div class="panel empty-state">
-    <i class="fas fa-tag d-block"></i>
-    <h3>No items yet</h3>
-    <p>Create an item to generate a QR label.</p>
-    <a href="{% url 'item_add' %}" class="btn-brand">Add item</a>
-</div>
-{% endif %}
 {% endblock %}

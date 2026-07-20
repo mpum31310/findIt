@@ -1,54 +1,270 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ child.name }} — Scanofinder{% endblock %}
+{% block title %}{{ child.name }} {{ child.surname }} — Scanofinder{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-container {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    /* Navigation Breadcrumb & Header */
+    .detail-header {
+        margin-bottom: 2rem;
+    }
+
+    .detail-header__back {
+        color: var(--text-muted);
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin-bottom: 0.5rem;
+        transition: color 0.15s;
+    }
+
+    .detail-header__back:hover {
+        color: var(--primary-color);
+    }
+
+    .detail-header h1 {
+        font-size: 1.75rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        margin: 0;
+    }
+
+    /* Cards */
+    .detail-card {
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 1.75rem;
+    }
+
+    .child-summary {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .child-avatar {
+        width: 54px;
+        height: 54px;
+        background: #e0e7ff;
+        color: var(--primary-color);
+        font-size: 1.35rem;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .meta-badge {
+        background: #f1f5f9;
+        color: var(--text-muted);
+        font-size: 0.775rem;
+        font-weight: 600;
+        padding: 0.25rem 0.6rem;
+        border-radius: 6px;
+    }
+
+    /* Assigned Item Mini Row */
+    .assigned-item-row {
+        background: #f8fafc;
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 0.65rem 0.85rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        transition: border-color 0.15s;
+    }
+
+    .assigned-item-row:hover {
+        border-color: #cbd5e1;
+    }
+
+    .item-thumb-mini {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        object-fit: cover;
+        border: 1px solid var(--border-color);
+        flex-shrink: 0;
+    }
+
+    .item-icon-mini {
+        width: 36px;
+        height: 36px;
+        background: #e0e7ff;
+        color: var(--primary-color);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.875rem;
+        flex-shrink: 0;
+    }
+
+    /* Form Fields Styling */
+    .detail-card .form-label {
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: var(--text-main);
+        margin-bottom: 0.4rem;
+    }
+
+    .detail-card input[type="text"],
+    .detail-card textarea,
+    .detail-card select {
+        width: 100%;
+        padding: 0.65rem 0.85rem;
+        font-size: 0.925rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background-color: #ffffff;
+        transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .detail-card input[type="text"]:focus,
+    .detail-card textarea:focus,
+    .detail-card select:focus {
+        border-color: var(--primary-color);
+        outline: 0;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="page-head">
-    <h1>{{ child.name }} {{ child.surname }}</h1>
-</div>
+<div class="page-container">
 
-{% if items %}
-<div class="panel mb-3">
-    <h2 class="panel-title">Assigned items</h2>
-    <ul class="list-unstyled mb-0">
-        {% for item in items %}
-        <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
-            <span>{{ item.name }}</span>
-            <a href="{% url 'item_detail' item.pk %}" class="btn btn-outline-brand btn-sm-round">Open</a>
-        </li>
-        {% endfor %}
-    </ul>
-</div>
-{% endif %}
+    <!-- Header Block -->
+    <header class="detail-header">
+        <a href="{% url 'children_list' %}" class="detail-header__back">
+            <i class="fas fa-arrow-left"></i> Back to children
+        </a>
+        <h1>{{ child.name }} {{ child.surname }}</h1>
+    </header>
 
-<div class="panel" style="max-width: 560px;">
-    <h2 class="panel-title">Edit profile</h2>
-    <form method="post">
-        {% csrf_token %}
-        <div class="row g-3">
-            <div class="col-md-6">
-                <label class="form-label">Name</label>
-                {{ form.name }}
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Surname</label>
-                {{ form.surname }}
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Grade</label>
-                {{ form.grade }}
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">School</label>
-                {{ form.school }}
+    <div class="row g-4">
+        <!-- Left Column: Child Overview & Assigned Items -->
+        <div class="col-lg-5">
+            <div class="d-flex flex-column gap-4">
+                
+                <!-- Overview Card -->
+                <div class="detail-card">
+                    <div class="child-summary">
+                        <div class="child-avatar">
+                            <i class="fas fa-child"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-1">{{ child.name }} {{ child.surname }}</h5>
+                            <div class="d-flex flex-wrap gap-1">
+                                {% if child.grade %}
+                                    <span class="meta-badge"><i class="fas fa-graduation-cap me-1"></i>{{ child.grade }}</span>
+                                {% endif %}
+                                {% if child.school %}
+                                    <span class="meta-badge"><i class="fas fa-school me-1"></i>{{ child.school }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Assigned Items Section -->
+                    <div class="pt-3 border-top">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h6 class="fw-bold mb-0">Assigned items</h6>
+                            <a href="{% url 'item_add' %}" class="btn btn-link text-decoration-none p-0 small fw-semibold">
+                                + Add item
+                            </a>
+                        </div>
+
+                        {% if items %}
+                        <div class="d-flex flex-column gap-2">
+                            {% for item in items %}
+                            <div class="assigned-item-row">
+                                <div class="d-flex align-items-center gap-2 overflow-hidden">
+                                    {% if item.item_image %}
+                                        <img src="{{ item.item_image.url }}" class="item-thumb-mini" alt="{{ item.name }}">
+                                    {% else %}
+                                        <div class="item-icon-mini">
+                                            <i class="fas fa-tag"></i>
+                                        </div>
+                                    {% endif %}
+                                    <span class="fw-semibold text-truncate small text-dark">{{ item.name }}</span>
+                                </div>
+                                <a href="{% url 'item_detail' item.pk %}" class="btn btn-outline-secondary btn-sm fw-semibold px-2.5 py-1">
+                                    Open
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="text-center py-3 bg-light rounded-3 border border-dashed">
+                            <p class="text-muted small mb-0">No items assigned to {{ child.name }} yet.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
             </div>
         </div>
-        <div class="mt-4 d-flex flex-wrap gap-2">
-            <button type="submit" class="btn btn-brand">Save</button>
-            <a href="{% url 'children_list' %}" class="btn btn-outline-brand">Back</a>
-            <button type="submit" name="delete" class="btn btn-outline-danger ms-auto"
-                onclick="return confirm('Delete this child?');">Delete</button>
+
+        <!-- Right Column: Edit Profile Form -->
+        <div class="col-lg-7">
+            <div class="detail-card">
+                <h5 class="fw-bold mb-3">Edit profile</h5>
+                
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label" for="{{ form.name.id_for_label }}">First Name</label>
+                            {{ form.name }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="{{ form.surname.id_for_label }}">Surname</label>
+                            {{ form.surname }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="{{ form.grade.id_for_label }}">Grade</label>
+                            {{ form.grade }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="{{ form.school.id_for_label }}">School</label>
+                            {{ form.school }}
+                        </div>
+                    </div>
+
+                    <hr class="my-4 text-muted opacity-25">
+
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary fw-semibold px-4">
+                                Save changes
+                            </button>
+                            <a href="{% url 'children_list' %}" class="btn btn-outline-secondary fw-semibold">
+                                Cancel
+                            </a>
+                        </div>
+                        <button type="submit" name="delete" class="btn btn-outline-danger fw-semibold"
+                            onclick="return confirm('Are you sure you want to delete this child profile?');">
+                            <i class="fas fa-trash-alt me-1"></i> Delete
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </form>
+    </div>
+
 </div>
 {% endblock %}

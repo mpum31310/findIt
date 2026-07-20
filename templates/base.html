@@ -5,38 +5,286 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Scanofinder{% endblock %}</title>
     {% load static %}
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Third-Party Frameworks -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=5">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=6">
+
+    <style>
+        :root {
+            --app-font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --app-bg: #f8fafc;
+            --sidebar-width: 260px;
+            --header-height: 64px;
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            font-family: var(--app-font);
+            background-color: var(--app-bg);
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Modern App Header */
+        .app-header {
+            height: var(--header-height);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .app-header__brand {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transition: opacity 0.2s;
+        }
+
+        .app-header__brand:hover {
+            color: var(--primary-color);
+        }
+
+        .app-header__brand-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            color: #ffffff;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+        }
+
+        /* Cart Badge */
+        .header-cart {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            color: var(--text-main);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .header-cart:hover {
+            background: #e2e8f0;
+            color: var(--primary-color);
+        }
+
+        .header-cart__badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--primary-color);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ffffff;
+        }
+
+        /* Guest Navigation */
+        .app-header__guest-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .app-header__guest-nav a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.925rem;
+            transition: color 0.2s;
+        }
+
+        .app-header__guest-nav a:hover {
+            color: var(--primary-color);
+        }
+
+        .btn-signup {
+            background: var(--primary-color);
+            color: #ffffff !important;
+            padding: 0.5rem 1.1rem;
+            border-radius: 8px;
+            font-weight: 600 !important;
+            transition: background 0.2s, transform 0.1s !important;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.2);
+        }
+
+        .btn-signup:hover {
+            background: var(--primary-hover) !important;
+            transform: translateY(-1px);
+        }
+
+        /* Sidebar Styling */
+        .app-layout {
+            display: flex;
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        .app-sidebar {
+            width: var(--sidebar-width);
+            background: #ffffff;
+            border-right: 1px solid var(--border-color);
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .app-sidebar__label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin: 1.25rem 0 0.5rem 0.75rem;
+        }
+
+        .app-sidebar__label:first-child {
+            margin-top: 0;
+        }
+
+        .app-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .app-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.65rem 0.85rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.925rem;
+            transition: all 0.15s ease;
+        }
+
+        .app-nav a i {
+            width: 20px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .app-nav a:hover {
+            background-color: #f1f5f9;
+            color: var(--text-main);
+        }
+
+        .app-nav a.is-active {
+            background-color: #e0e7ff;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* App Main Content Area */
+        .app-content, .site-content {
+            padding: 2rem;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Offcanvas Drawer Fixes */
+        .sidebar-offcanvas {
+            width: 280px !important;
+            border-top-right-radius: 16px;
+            border-bottom-right-radius: 16px;
+        }
+
+        /* Footer */
+        .site-footer {
+            background: #ffffff;
+            border-top: 1px solid var(--border-color);
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .site-footer a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin: 0 0.75rem;
+            transition: color 0.2s;
+        }
+
+        .site-footer a:hover {
+            color: var(--primary-color);
+        }
+    </style>
     {% block extra_css %}{% endblock %}
 </head>
 <body class="d-flex flex-column min-vh-100">
-    <header class="app-header">
-        {% if user.is_authenticated %}
-        <button class="app-header__toggle d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-label="Open menu">
-            <i class="fas fa-bars"></i>
-        </button>
-        {% endif %}
 
-        <a class="app-header__brand" href="{% url 'home' %}">
+    <!-- App Header -->
+    <header class="app-header">
+        <!-- Universal Mobile Navigation Trigger -->
+        <button class="btn btn-icon d-lg-none border-0 p-2 text-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-label="Toggle navigation">
+            <i class="fas fa-bars fa-lg"></i>
+        </button>
+
+        <a class="app-header__brand me-auto me-lg-0" href="{% url 'home' %}">
             <span class="app-header__brand-icon"><i class="fas fa-qrcode"></i></span>
-            Scanofinder
+            <span>Scanofinder</span>
         </a>
 
-        <div class="app-header__spacer"></div>
+        <div class="flex-grow-1 d-none d-lg-block"></div>
 
         {% if user.is_authenticated and cart_count %}
-        <a href="{% url 'cart' %}" class="header-cart d-none d-md-inline-flex" title="View cart">
-            <i class="fas fa-shopping-cart"></i>
-            <span>{{ cart_count }}</span>
+        <a href="{% url 'cart' %}" class="header-cart" title="View cart">
+            <i class="fas fa-shopping-bag"></i>
+            <span class="header-cart__badge">{{ cart_count }}</span>
         </a>
         {% endif %}
 
         {% if not user.is_authenticated %}
-        <ul class="app-header__guest-nav d-none d-sm-flex">
+        <ul class="app-header__guest-nav d-none d-sm-flex ms-auto">
             <li><a href="{% url 'home' %}">Home</a></li>
             <li><a href="{% url 'shop' %}">Shop</a></li>
             <li><a href="{% url 'login' %}">Sign in</a></li>
@@ -45,8 +293,11 @@
         {% endif %}
     </header>
 
-    {% if user.is_authenticated %}
+    <!-- App Layout Container -->
     <div class="app-layout flex-grow-1">
+        
+        <!-- Desktop Sidebar (Logged in users) -->
+        {% if user.is_authenticated %}
         <aside class="app-sidebar d-none d-lg-flex">
             <p class="app-sidebar__label">Menu</p>
             <ul class="app-nav">
@@ -55,53 +306,64 @@
                 <li><a href="{% url 'items_list' %}" class="{% if 'items' in request.path %}is-active{% endif %}"><i class="fas fa-tag"></i> Items</a></li>
                 <li><a href="{% url 'messages_list' %}" class="{% if 'messages' in request.path %}is-active{% endif %}"><i class="fas fa-envelope"></i> Messages</a></li>
             </ul>
+
             <p class="app-sidebar__label">Account</p>
             <ul class="app-nav">
                 <li><a href="{% url 'shop' %}" class="{% if 'shop' in request.path or request.resolver_match.url_name == 'cart' or request.resolver_match.url_name == 'shop_checkout' %}is-active{% endif %}"><i class="fas fa-store"></i> Shop</a></li>
                 <li><a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}is-active{% endif %}"><i class="fas fa-user"></i> Profile</a></li>
             </ul>
-            <div class="app-sidebar__footer">
+
+            <div class="mt-auto">
                 <ul class="app-nav">
-                    <li><a href="{% url 'logout' %}"><i class="fas fa-arrow-right-from-bracket"></i> Sign out</a></li>
+                    <li><a href="{% url 'logout' %}" class="text-danger"><i class="fas fa-arrow-right-from-bracket"></i> Sign out</a></li>
                 </ul>
             </div>
         </aside>
+        {% endif %}
 
-        <div class="offcanvas offcanvas-start sidebar-offcanvas d-lg-none" tabindex="-1" id="sidebarMenu">
+        <!-- Unified Mobile Drawer (Offcanvas) -->
+        <div class="offcanvas offcanvas-start sidebar-offcanvas d-lg-none" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
             <div class="offcanvas-header border-bottom">
-                <h5 class="offcanvas-title fw-semibold">Menu</h5>
+                <h5 class="offcanvas-title fw-bold" id="sidebarMenuLabel">Scanofinder</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                <ul class="app-nav">
-                    <li><a href="{% url 'home' %}" data-bs-dismiss="offcanvas"><i class="fas fa-house"></i> Home</a></li>
-                    <li><a href="{% url 'children_list' %}" data-bs-dismiss="offcanvas"><i class="fas fa-child"></i> Children</a></li>
-                    <li><a href="{% url 'items_list' %}" data-bs-dismiss="offcanvas"><i class="fas fa-tag"></i> Items</a></li>
-                    <li><a href="{% url 'messages_list' %}" data-bs-dismiss="offcanvas"><i class="fas fa-envelope"></i> Messages</a></li>
-                    <li><a href="{% url 'shop' %}" data-bs-dismiss="offcanvas"><i class="fas fa-store"></i> Shop</a></li>
-                    <li><a href="{% url 'profile' %}" data-bs-dismiss="offcanvas"><i class="fas fa-user"></i> Profile</a></li>
-                    <li><a href="{% url 'logout' %}"><i class="fas fa-arrow-right-from-bracket"></i> Sign out</a></li>
+                {% if user.is_authenticated %}
+                <p class="app-sidebar__label">Menu</p>
+                <ul class="app-nav mb-3">
+                    <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}is-active{% endif %}"><i class="fas fa-house"></i> Home</a></li>
+                    <li><a href="{% url 'children_list' %}" class="{% if 'children' in request.path %}is-active{% endif %}"><i class="fas fa-child"></i> Children</a></li>
+                    <li><a href="{% url 'items_list' %}" class="{% if 'items' in request.path %}is-active{% endif %}"><i class="fas fa-tag"></i> Items</a></li>
+                    <li><a href="{% url 'messages_list' %}" class="{% if 'messages' in request.path %}is-active{% endif %}"><i class="fas fa-envelope"></i> Messages</a></li>
                 </ul>
+
+                <p class="app-sidebar__label">Account</p>
+                <ul class="app-nav mb-4">
+                    <li><a href="{% url 'shop' %}" class="{% if 'shop' in request.path or request.resolver_match.url_name == 'cart' or request.resolver_match.url_name == 'shop_checkout' %}is-active{% endif %}"><i class="fas fa-store"></i> Shop</a></li>
+                    <li><a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}is-active{% endif %}"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="{% url 'logout' %}" class="text-danger"><i class="fas fa-arrow-right-from-bracket"></i> Sign out</a></li>
+                </ul>
+                {% else %}
+                <ul class="app-nav">
+                    <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}is-active{% endif %}"><i class="fas fa-house"></i> Home</a></li>
+                    <li><a href="{% url 'shop' %}" class="{% if 'shop' in request.path %}is-active{% endif %}"><i class="fas fa-store"></i> Shop</a></li>
+                    <li><a href="{% url 'login' %}" class="{% if request.resolver_match.url_name == 'login' %}is-active{% endif %}"><i class="fas fa-right-to-bracket"></i> Sign in</a></li>
+                    <li><a href="{% url 'register' %}" class="btn-signup text-center justify-content-center text-white mt-2">Get started</a></li>
+                </ul>
+                {% endif %}
             </div>
         </div>
 
-        <div class="app-content flex-grow-1">
-    {% else %}
-        <div class="site-content flex-grow-1">
-    {% endif %}
-
+        <!-- Main Workspace -->
+        <main class="{% if user.is_authenticated %}app-content{% else %}site-content{% endif %} flex-grow-1">
             {% include 'includes/flash_messages.html' %}
             {% block content %}{% endblock %}
-
-    {% if user.is_authenticated %}
-        </div>
+        </main>
     </div>
-    {% else %}
-        </div>
-    {% endif %}
 
-    <footer class="site-footer mt-auto">
-        <p class="mb-1">&copy; {% now "Y" %} Scanofinder</p>
+    <!-- App Footer -->
+    <footer class="site-footer">
+        <p class="mb-2">&copy; {% now "Y" %} Scanofinder. All rights reserved.</p>
         <p class="mb-0">
             <a href="{% url 'about' %}">About</a>
             <a href="{% url 'shop' %}">Shop</a>
@@ -110,6 +372,7 @@
         </p>
     </footer>
 
+    <!-- Third-Party Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     {% block extra_js %}{% endblock %}
 </body>

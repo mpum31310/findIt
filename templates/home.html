@@ -1,92 +1,330 @@
 {% extends 'base.html' %}
 
-{% block title %}Scanofinder — QR labels for your family{% endblock %}
+{% block title %}Scanofinder — QR Labels for Your Family{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Scope Variables & General Adjustments */
+    .home-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Quick Nav Horizontal Scroll */
+    .quick-links-nav {
+        display: flex;
+        gap: 0.75rem;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+        scrollbar-width: none; /* Firefox */
+    }
+    .quick-links-nav::-webkit-scrollbar {
+        display: none; /* Chrome/Safari */
+    }
+
+    .quick-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.6rem 1.1rem;
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        border-radius: 50px;
+        color: var(--text-main);
+        font-weight: 600;
+        font-size: 0.875rem;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+
+    .quick-pill:hover {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+        transform: translateY(-1px);
+    }
+
+    .quick-pill--active {
+        background: #e0e7ff;
+        color: var(--primary-color);
+        border-color: transparent;
+    }
+
+    /* Banner Component */
+    .shop-banner {
+        background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+        border-radius: 16px;
+        padding: 1.25rem 1.75rem;
+        color: #ffffff;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .shop-banner:hover {
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px -6px rgba(15, 23, 42, 0.25);
+    }
+
+    .shop-banner__badge {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(4px);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        white-space: nowrap;
+    }
+
+    /* Hero Section */
+    .hero-card {
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 2.25rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #f1f5f9;
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        font-weight: 700;
+        padding: 0.35rem 0.75rem;
+        border-radius: 50px;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+
+    .hero-title {
+        font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+        font-weight: 800;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+    }
+
+    /* Side Stats Box */
+    .side-stats-card {
+        background: #f8fafc;
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 1.5rem;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .stat-pill {
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        padding: 0.75rem;
+        border-radius: 12px;
+        text-align: center;
+    }
+
+    .stat-pill span {
+        display: block;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: var(--text-muted);
+    }
+
+    .stat-pill strong {
+        color: var(--primary-color);
+        font-size: 0.95rem;
+    }
+
+    /* Feature Cards */
+    .feature-box {
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 1.5rem;
+        height: 100%;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .feature-box:hover {
+        transform: translateY(-3px);
+        border-color: #cbd5e1;
+    }
+
+    .feature-icon-wrapper {
+        width: 44px;
+        height: 44px;
+        background: #e0e7ff;
+        color: var(--primary-color);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Step System */
+    .steps-container {
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 2rem;
+    }
+
+    .step-circle {
+        width: 38px;
+        height: 38px;
+        background: var(--primary-color);
+        color: #ffffff;
+        font-weight: 700;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-{% if user.is_authenticated %}
-<nav class="quick-links" aria-label="Quick navigation">
-    <a href="{% url 'children_list' %}" class="quick-link"><i class="fas fa-child"></i> Children</a>
-    <a href="{% url 'items_list' %}" class="quick-link"><i class="fas fa-tag"></i> Items</a>
-    <a href="{% url 'item_add' %}" class="quick-link"><i class="fas fa-plus"></i> Add item</a>
-    <a href="{% url 'messages_list' %}" class="quick-link"><i class="fas fa-envelope"></i> Messages</a>
-    <a href="{% url 'shop' %}" class="quick-link quick-link--shop"><i class="fas fa-store"></i> Shop</a>
-</nav>
-{% endif %}
+<div class="home-container d-flex flex-column gap-4">
 
-<a href="{% url 'shop' %}" class="shop-banner">
-    <div class="shop-banner__text">
-        <strong>Order QR labels &amp; clothing stamps</strong>
-        <span>Physical products to display your Scanofinder codes on school gear</span>
-    </div>
-    <span class="shop-banner__cta">Shop now <i class="fas fa-arrow-right"></i></span>
-</a>
+    <!-- 1. Quick Navigation Bar -->
+    {% if user.is_authenticated %}
+    <nav class="quick-links-nav" aria-label="Quick navigation">
+        <a href="{% url 'children_list' %}" class="quick-pill"><i class="fas fa-child"></i> Children</a>
+        <a href="{% url 'items_list' %}" class="quick-pill"><i class="fas fa-tag"></i> Items</a>
+        <a href="{% url 'item_add' %}" class="quick-pill"><i class="fas fa-plus"></i> Add Item</a>
+        <a href="{% url 'messages_list' %}" class="quick-pill"><i class="fas fa-envelope"></i> Messages</a>
+        <a href="{% url 'shop' %}" class="quick-pill quick-pill--active"><i class="fas fa-store"></i> Shop Store</a>
+    </nav>
+    {% endif %}
 
-<section class="hero hero--modern">
-    <div>
-        <span class="hero__badge"><i class="fas fa-shield-alt"></i> Smart family safety</span>
-        <h1>Track, protect, and reunite school gear in seconds</h1>
-        <p class="lead">Create QR codes for every item, order durable labels or clothing stamps, and receive instant updates when a finder scans them.</p>
-        <div class="hero-actions">
-            {% if user.is_authenticated %}
-                <a href="{% url 'item_add' %}" class="btn-brand">Add item</a>
-                <a href="{% url 'shop' %}" class="btn-outline-brand">Shop labels &amp; stamps</a>
-            {% else %}
-                <a href="{% url 'register' %}" class="btn-brand">Create free account</a>
-                <a href="{% url 'login' %}" class="btn-outline-brand">Sign in</a>
-                <a href="#shop" class="btn-outline-brand">Browse shop</a>
-            {% endif %}
+    <!-- 2. Store Banner -->
+    <a href="{% url 'shop' %}" class="shop-banner">
+        <div>
+            <h6 class="fw-bold mb-1">Order QR labels &amp; clothing stamps</h6>
+            <p class="small mb-0 text-white-50">Durable physical products to display your Scanofinder codes on gear</p>
         </div>
-    </div>
-    <div class="hero__side">
-        <h3 class="hero__card-title">What families love</h3>
-        <p class="hero__card-text">A simple workflow with modern tools built for busy school days.</p>
-        <div class="hero__stats">
-            <div class="hero__stat"><span>QR setup</span><strong>Fast</strong></div>
-            <div class="hero__stat"><span>Label delivery</span><strong>Reliable</strong></div>
-            <div class="hero__stat"><span>Finder updates</span><strong>Instant</strong></div>
+        <span class="shop-banner__badge d-none d-sm-inline-flex align-items-center gap-2">
+            Shop now <i class="fas fa-arrow-right"></i>
+        </span>
+    </a>
+
+    <!-- 3. Main Hero Block -->
+    <section class="hero-card">
+        <div class="row gy-4 align-items-center">
+            <div class="col-lg-7">
+                <span class="hero-badge mb-3"><i class="fas fa-shield-alt"></i> Smart family safety</span>
+                <h1 class="hero-title mb-3">Track, protect, and reunite school gear in seconds</h1>
+                <p class="text-muted lead fs-6 mb-4">Create QR codes for every item, order durable labels or clothing stamps, and receive instant updates when a finder scans them.</p>
+                <div class="d-flex flex-wrap gap-2">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'item_add' %}" class="btn btn-primary px-4 py-2 fw-semibold">Add item</a>
+                        <a href="{% url 'shop' %}" class="btn btn-outline-secondary px-4 py-2 fw-semibold">Shop labels &amp; stamps</a>
+                    {% else %}
+                        <a href="{% url 'register' %}" class="btn btn-primary px-4 py-2 fw-semibold">Create free account</a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-secondary px-4 py-2 fw-semibold">Sign in</a>
+                        <a href="{% url 'shop' %}" class="btn btn-link text-decoration-none px-3 py-2 fw-semibold">Browse shop</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="side-stats-card">
+                    <h5 class="fw-bold mb-2">What families love</h5>
+                    <p class="text-muted small mb-4">A simple workflow with modern tools built for busy school days.</p>
+                    <div class="row g-2">
+                        <div class="col-4">
+                            <div class="stat-pill">
+                                <span>QR Setup</span>
+                                <strong>Fast</strong>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-pill">
+                                <span>Delivery</span>
+                                <strong>Reliable</strong>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-pill">
+                                <span>Updates</span>
+                                <strong>Instant</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-{% include 'includes/shop_storefront.html' %}
+    <!-- 4. Shop Embed -->
+    {% include 'includes/shop_storefront.html' %}
 
-<div class="features">
-    <article class="feature">
-        <div class="feature__icon"><i class="fas fa-qrcode"></i></div>
-        <h3>QR codes in the app</h3>
-        <p>Generate a unique code for each item.</p>
-    </article>
-    <article class="feature">
-        <div class="feature__icon"><i class="fas fa-tags"></i></div>
-        <h3>Labels &amp; stamps</h3>
-        <p>Order physical products from our shop.</p>
-    </article>
-    <article class="feature">
-        <div class="feature__icon"><i class="fas fa-comment-dots"></i></div>
-        <h3>Finder inbox</h3>
-        <p>Get a message when someone scans a code.</p>
-    </article>
+    <!-- 5. Features Grid -->
+    <section class="row g-3">
+        <div class="col-md-4">
+            <article class="feature-box">
+                <div class="feature-icon-wrapper"><i class="fas fa-qrcode"></i></div>
+                <h5 class="fw-bold mb-2">QR codes in the app</h5>
+                <p class="text-muted small mb-0">Generate a unique, trackable code for every school or personal item instantly.</p>
+            </article>
+        </div>
+        <div class="col-md-4">
+            <article class="feature-box">
+                <div class="feature-icon-wrapper"><i class="fas fa-tags"></i></div>
+                <h5 class="fw-bold mb-2">Labels &amp; stamps</h5>
+                <p class="text-muted small mb-0">Order physical, waterproof vinyl labels or fabric stamps directly from our shop.</p>
+            </article>
+        </div>
+        <div class="col-md-4">
+            <article class="feature-box">
+                <div class="feature-icon-wrapper"><i class="fas fa-comment-dots"></i></div>
+                <h5 class="fw-bold mb-2">Finder inbox</h5>
+                <p class="text-muted small mb-0">Receive instant, secure messages directly when someone scans a lost item.</p>
+            </article>
+        </div>
+    </section>
+
+    <!-- 6. How It Works -->
+    <section class="steps-container">
+        <h4 class="fw-bold mb-4 text-center">How it works</h4>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="d-flex align-items-start gap-3">
+                    <div class="step-circle">1</div>
+                    <p class="small fw-medium text-dark mb-0 pt-1">Add children and register items in the app</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="d-flex align-items-start gap-3">
+                    <div class="step-circle">2</div>
+                    <p class="small fw-medium text-dark mb-0 pt-1">Order custom QR labels or stamps from the shop</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="d-flex align-items-start gap-3">
+                    <div class="step-circle">3</div>
+                    <p class="small fw-medium text-dark mb-0 pt-1">Apply them to bags, bottles, and school gear</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="d-flex align-items-start gap-3">
+                    <div class="step-circle">4</div>
+                    <p class="small fw-medium text-dark mb-0 pt-1">Get notified immediately when items are scanned</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
 </div>
-
-<section class="panel">
-    <h2 class="panel-title">How it works</h2>
-    <div class="steps-list">
-        <div class="steps-list__item">
-            <span class="steps-list__num">1</span>
-            <span>Add children and create items in the app</span>
-        </div>
-        <div class="steps-list__item">
-            <span class="steps-list__num">2</span>
-            <span>Order QR labels or stamps from the shop</span>
-        </div>
-        <div class="steps-list__item">
-            <span class="steps-list__num">3</span>
-            <span>Apply them to bags, bottles, and uniforms</span>
-        </div>
-        <div class="steps-list__item">
-            <span class="steps-list__num">4</span>
-            <span>Receive messages when items are found</span>
-        </div>
-    </div>
-</section>
 {% endblock %}
