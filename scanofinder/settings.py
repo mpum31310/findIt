@@ -51,7 +51,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'cloudinary_storage',
     'django.contrib.staticfiles',
+    'cloudinary',
     'accounts',
     'children',
     'items',
@@ -178,25 +180,25 @@ STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', '')
 SUBSCRIPTION_PRICE = int(os.environ.get('SUBSCRIPTION_PRICE', '20000'))
 SUBSCRIPTION_PRICE_DISPLAY = os.environ.get('SUBSCRIPTION_PRICE_DISPLAY', '200')
 
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'WARNING',
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    },
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'root': {
+#         'handlers': ['console'],
+#         'level': 'WARNING',
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['console'],
+#             'level': 'ERROR',
+#             'propagate': True,
+#         },
+#     },
+# }
